@@ -5,49 +5,75 @@
     <title>Todo Client</title>
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="js/libs/angular.js"></script>
     <style>
       .hard {background: red;}
       .medium {background: yellow;}
       .easy {background: green;}
-      .work {border: solid 3px black;}
-      .sport {border: solid 3px palevioletred;}
     </style>
   </head>
   <body>
 
     <div class="todo" ng-controller="TodoController as main">
+      <form class="todo__form" ng-submit="main.addTodo();">
+        <h4>{{ main.time | date: "EEEE HH:mm" }}</h4>
+        <h3>Add new todo</h3>
+        <input type="text" placeholder="add title" ng-model="main.newTodo">
+        <input type="text" placeholder="difficulty" ng-model="main.newTodoDifficulty">
+        <input type="text" placeholder="category" ng-model="main.newTodoCategory">
+        <button type="submit">Submit</button>
+      </form>
+
       <ul class="todo__list">
         <li
           ng-class="{
             hard: item.difficulty > 4,
             medium: (item.difficulty == 4 || item.difficulty < 4) && item.difficulty > 2,
-            easy: item.difficulty < 3,
-            work: item.category === 'work',
-            sport: item.category === 'sport'
+            easy: item.difficulty < 3
           }" 
           ng-repeat="item in main.list">
-          <div class="inline">
-            <p> {{ item.title }} {{ $index }} </p>
-            <input type="checkbox" id="todo-{{ $index }}" ng-model="item.completed">
-            <label class="toggle" for="todo-{{ $index }}"></label>
-            <p ng-if="item.completed"> &nbsp;&nbsp;Completed </p>
-            <p ng-show="!item.completed"> &nbsp;&nbsp;Not completed </p>
-            <p ng-show="item.difficulty > 4"> &nbsp;&nbsp;Difficult </p>
-            <div ng-switch="item.category">
-              <div ng-switch-when="sport">
-                <p> <strong>&nbsp;&nbsp;SPORT!</strong> </p>
-              </div>
-              <div ng-switch-when="work">
-                <p> <strong>&nbsp;&nbsp;WORK!</strong> </p>
-              </div>
-              <div ng-switch-default>
-                <p> <strong>&nbsp;&nbsp;No category</strong> </p>
-              </div>
+
+          <div>
+            <p ng-dblclick="showEditField = true;" ng-hide="showEditField"> {{ item.title }} </p>
+            <input type="text" ng-show="showEditField" ng-model="item.title" ng-blur="showEditField = false;">
+          </div>
+
+          <input type="checkbox" id="todo-{{ $index }}" ng-model="item.completed">
+          <label class="toggle" for="todo-{{ $index }}"></label>
+          <p ng-if="item.completed"> &nbsp;&nbsp;Completed </p>
+          <p ng-show="!item.completed"> &nbsp;&nbsp;Not completed </p>
+          <p ng-show="item.difficulty > 4"> &nbsp;&nbsp;Difficult </p>
+          <div ng-switch="item.category">
+            <div ng-switch-when="sport">
+              <p> <strong>&nbsp;&nbsp;SPORT!</strong> </p>
+            </div>
+            <div ng-switch-when="work">
+              <p> <strong>&nbsp;&nbsp;WORK!</strong> </p>
+            </div>
+            <div ng-switch-default>
+              <p> <strong>&nbsp;&nbsp;No category</strong> </p>
             </div>
           </div>
+          <a href="" ng-click="main.addToFavorite(item)">Add to favorite</a>
+          <a class="mt-5" href="" ng-click="main.removeTodo(item, $index);">&#215;</a>
+
         </li>
       </ul>
+      <ul>
+        <li ng_repeat="favorite in main.favoriteActivity">
+          <p> list: {{ favorite.title }} </p>
+        </li>
+      </ul>
+
+      <p class="todo__remaining">
+        <span ng-show="main.getRemaining() != 0">
+          <strong> You have {{ main.getRemaining() }} remaining tasks </strong>
+        </span>
+        <span ng-show="main.getRemaining() === 0">
+          <strong> You did everything! </strong>
+        </span>
+      </p>
     </div>
 
     <script src="js/libs/app.js"></script>

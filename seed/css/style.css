@@ -18,7 +18,7 @@ ul {
 
 .todo {
   position: relative;
-  width: 350px;
+  width: 550px;
   margin: 0 auto;
   padding: 0 0 12px;
   background: #fff;
@@ -210,9 +210,4 @@ input[type=checkbox]:checked + .toggle:after {
 .todo-pagination {
   margin: 12px 12px 0 50px;
   height: 22px;
-}
-
-.inline {
-  display: flex;
-  justify-content: flex-start;
 }
