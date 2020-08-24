@@ -25,6 +25,13 @@
         <button type="submit">Submit</button>
       </form>
 
+      <h1>Order list by</h1>
+      <a href="" ng-click="type = 'title'">Alphabetical Order</a>
+      <a href="" ng-click="type = 'difficulty'">Difficulty</a>
+
+      <h1>Search</h1>
+      <input type="text" placeholder="Type your search" ng-model="search">
+
       <ul class="todo__list">
         <li
           ng-class="{
@@ -32,7 +39,7 @@
             medium: (item.difficulty == 4 || item.difficulty < 4) && item.difficulty > 2,
             easy: item.difficulty < 3
           }" 
-          ng-repeat="item in main.list">
+          ng-repeat="item in main.list | orderBy: type | filter: { category: search }">
 
           <div>
             <p ng-dblclick="showEditField = true;" ng-hide="showEditField"> {{ item.title }} </p>
