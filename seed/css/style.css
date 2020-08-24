@@ -211,3 +211,8 @@ input[type=checkbox]:checked + .toggle:after {
   margin: 12px 12px 0 50px;
   height: 22px;
 }
+
+.inline {
+  display: flex;
+  justify-content: flex-start;
+}

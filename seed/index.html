@@ -6,9 +6,51 @@
     <link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <link rel="stylesheet" href="css/style.css">
     <script src="js/libs/angular.js"></script>
+    <style>
+      .hard {background: red;}
+      .medium {background: yellow;}
+      .easy {background: green;}
+      .work {border: solid 3px black;}
+      .sport {border: solid 3px palevioletred;}
+    </style>
   </head>
   <body>
-    <script src="js/app.js"></script>
-    <script src="js/MainController.js"></script>
+
+    <div class="todo" ng-controller="TodoController as main">
+      <ul class="todo__list">
+        <li
+          ng-class="{
+            hard: item.difficulty > 4,
+            medium: (item.difficulty == 4 || item.difficulty < 4) && item.difficulty > 2,
+            easy: item.difficulty < 3,
+            work: item.category === 'work',
+            sport: item.category === 'sport'
+          }" 
+          ng-repeat="item in main.list">
+          <div class="inline">
+            <p> {{ item.title }} {{ $index }} </p>
+            <input type="checkbox" id="todo-{{ $index }}" ng-model="item.completed">
+            <label class="toggle" for="todo-{{ $index }}"></label>
+            <p ng-if="item.completed"> &nbsp;&nbsp;Completed </p>
+            <p ng-show="!item.completed"> &nbsp;&nbsp;Not completed </p>
+            <p ng-show="item.difficulty > 4"> &nbsp;&nbsp;Difficult </p>
+            <div ng-switch="item.category">
+              <div ng-switch-when="sport">
+                <p> <strong>&nbsp;&nbsp;SPORT!</strong> </p>
+              </div>
+              <div ng-switch-when="work">
+                <p> <strong>&nbsp;&nbsp;WORK!</strong> </p>
+              </div>
+              <div ng-switch-default>
+                <p> <strong>&nbsp;&nbsp;No category</strong> </p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <script src="js/libs/app.js"></script>
+    <script src="js/libs/todo.controller.js"></script>
   </body>
 </html>
