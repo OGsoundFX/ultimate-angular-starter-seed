@@ -1,54 +1,79 @@
-function TodoController() {
-    this.newTodo = "";
-    this.newTodoDifficulty = "";
-    this.newTodoCategory = "";
-    this.favoriteActivity = [];
-    this.addToFavorite = item => {
-        this.favoriteActivity.push(item);
-    };
-    this.list = [{
-        title: 'First todo item!',
-        completed: false,
-        difficulty: 5,
-        category: "sport"
-    },{
-        title: 'Second todo item!',
-        completed: true,
-        difficulty: 4,
-        category: "sport"
-    },{
-        title: 'Third todo item!',
-        completed: false,
-        difficulty: 2,
-        category: "work"
-    },{
-        title: 'Forth todo item!',
-        completed: true,
-        difficulty: 6
-    }];
+function TodoController(TodoService) {
+    var ctrl = this;
+    ctrl.list = [];
+// TodoService
+    getTodos = () => {
+        TodoService
+            .retrieve()
+            .then(function (response) {
+                ctrl.list = response;
+            });
+    }
+// End of TodoService
 
-    this.addTodo = () => {
-        this.list.unshift({
-            title: this.newTodo,
-            difficulty: this.newTodoDifficulty,
-            category: this.newTodoCategory,
+    ctrl.newTodo = "";
+    ctrl.newTodoDifficulty = "";
+    ctrl.newTodoCategory = "";
+    ctrl.favoriteActivity = [];
+    ctrl.addToFavorite = item => {
+        ctrl.favoriteActivity.push(item);
+    };
+    
+    ctrl.addTodo = () => {
+        ctrl.list.unshift({
+            title: ctrl.newTodo,
+            difficulty: ctrl.newTodoDifficulty,
+            category: ctrl.newTodoCategory,
             completed: false
         });
-        this.newTodo = "";
-        this.newTodoCategory = "";
-        this.newTodoDifficulty = "";
+        ctrl.newTodo = "";
+        ctrl.newTodoCategory = "";
+        ctrl.newTodoDifficulty = "";
     };
-    this.removeTodo = (item, index) => {
-        this.list.splice(index, 1);
+    ctrl.removeTodo = function (item, index) {
+        console.log("something");
+        TodoService
+            .remove(item)
+            .then(function (response) {
+                ctrl.list.splice(index, 1);
+        });
     };
-    this.getRemaining = () => {
+    
+    ctrl.updateTodo = (item, index) => {
+        TodoService
+            .update(item);
+    };
+    
+    ctrl.getRemaining = () => {
         let n = 0;
-        this.list.forEach((item) => {
+        ctrl.list.forEach((item) => {
             item.completed != true ? n +=1 : n += 0; 
         });
         return n;
     };
-    this.time = new Date();
+    ctrl.time = new Date();
+    
+    // ctrl.list = [{
+    //     title: 'First todo item!',
+    //     completed: false,
+    //     difficulty: 5,
+    //     category: "sport"
+    // },{
+    //     title: 'Second todo item!',
+    //     completed: true,
+    //     difficulty: 4,
+    //     category: "sport"
+    // },{
+    //     title: 'Third todo item!',
+    //     completed: false,
+    //     difficulty: 2,
+    //     category: "work"
+    // },{
+    //     title: 'Forth todo item!',
+    //     completed: true,
+    //     difficulty: 6
+    // }];
+    getTodos();
 }
 
 // MainController.$inject = ['$scope'];

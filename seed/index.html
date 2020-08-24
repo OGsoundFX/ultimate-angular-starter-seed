@@ -43,7 +43,11 @@
 
           <div>
             <p ng-dblclick="showEditField = true;" ng-hide="showEditField"> {{ item.title }} </p>
-            <input type="text" ng-show="showEditField" ng-model="item.title" ng-blur="showEditField = false;">
+            <input
+              type="text"
+              ng-show="showEditField"
+              ng-model="item.title"
+              ng-blur="main.updateTodo(item, $index); showEditField = false;">
           </div>
 
           <input type="checkbox" id="todo-{{ $index }}" ng-model="item.completed">
@@ -65,6 +69,8 @@
           <a href="" ng-click="main.addToFavorite(item)">Add to favorite</a>
           <a class="mt-5" href="" ng-click="main.removeTodo(item, $index);">&#215;</a>
 
+          <pre> {{ item | json }} </pre>
+
         </li>
       </ul>
       <ul>
@@ -82,8 +88,8 @@
         </span>
       </p>
     </div>
-
     <script src="js/libs/app.js"></script>
     <script src="js/libs/todo.controller.js"></script>
+    <script src="js/libs/todo.service.js"></script>
   </body>
 </html>
